@@ -1,0 +1,16 @@
+{% if previewcount > 0 %}
+<div id="thumbs">
+    {% for item in previewlist %}
+            <img src="/thumb/{{ item }}" alt="{{ item }}" class="thumb-item" id="thumb-item-{{ item }}" onclick="loadcontent('{{ item }}');">
+    {% endfor %}
+    {% if totalpages > 1 %}
+    <div id="pager">
+        {% for item in pages %}
+        <div title="page {{item}}" onclick="loadthumbs({{item}});" 
+            class="pager-item {% if item == page %}selected-pager-item{% endif %}">{{item}}</div>
+        {% endfor %}
+        <div id="pageinfo">Page {{page}} of {{totalpages}}, images {{start}} - {{end}} ({{previewcount}}) of {{imagescount}}</div>
+    </div>
+    {% endif %}
+</div>
+{% endif %}

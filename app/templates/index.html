@@ -1,0 +1,38 @@
+<!DOCTYPE  html>
+<html>
+<head>
+<title>{{ apppath }}</title>
+<meta charset="utf-8">
+<link rel="icon" href="{{ url_for(staticpath, filename='img/favicon.png') }}" />
+<link rel="stylesheet" href="{{ url_for(staticpath, filename='css/webapp.css') }}" />
+<script type="text/javascript">
+        let srv = document.location.protocol + '//' + document.location.host;
+        let staticpath = srv + '/{{staticpath}}';
+</script>
+<script type="text/javascript" src="{{ url_for(staticpath, filename='js/webapp.js') }}"></script>
+</head>
+<body onload="return loadthumbs(1)">
+<div id="overlay"></div>
+<div id="container">
+<div id="header">
+        <select id = "imgname-control" name = "imgname" onchange="loadcontent(this.selectedOptions[0].value);">
+        {% for item in imageslist %}
+                <option value="{{item}}" {% if item == imgname %}selected{% endif %} >{{loop.index}}. {{item}}</option>
+        {% endfor %}
+        </select> 
+        <span id ="img-counter">Tolal images: {{imagescount}}</span>
+</div>
+<div id="content">
+        <div id="thumb-preview"></div>
+        <div id="workarea">
+                <div id="workimage">&nbsp;</div>
+                <div id="facefinder">&nbsp;</div>
+        </div>
+</div>
+<div id="footer">
+        <span id="app-pyversion">Python version: {{ pyversion }} </span>
+        <span id="app-path">Application path: {{ apppath }} </span>
+</div>
+</div>
+</body>
+</html>

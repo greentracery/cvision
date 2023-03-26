@@ -1,0 +1,71 @@
+<div class="workimage-preview-wrapper" id="workimage-preview-wrapper">
+        <img src ="/image/{{ imgname }}" alt="{{ imgname }}" id="workimage-preview" class="workimage-preview" onclick="togglezoom(this)">
+</div>
+
+<div class="data-image-wrapper">
+<h2>{{ imgname }}</h2>
+{% if imgcount > 0 %}
+<div class="image-data" id="image-data">
+        <h3>Image Data:</h3>
+        {% for key, value in imgdata.items() %}
+                <div>{{ key }} : {{ value }}</div>
+        {% endfor %}
+</div>
+{% endif %}
+
+<h2>Image Filter:</h2>
+<form name="img-filter-form" id="img-filter-form">
+<div id="img-filter">
+    <fieldset>
+    <legend>RGB Mode:</legend>
+    <div>
+        <input type="radio" id="mode-rgb" name="mode" value="RGB" checked {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+      <label for="mode-rgb">RGB</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-r" name="mode" value="R" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+      <label for="mode-r">Red</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-g" name="mode" value="G" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+      <label for="mode-g">Green</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-b" name="mode" value="B" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+      <label for="mode-b">Blue</label>
+    </div>
+    </fieldset>
+    <fieldset>
+    <legend>Filter:</legend>
+    <div>
+        <input type="radio" id="filter-none" name="filter" value="None" checked>
+      <label for="filter-none">None</label>
+    </div>
+    <div>
+        <input type="radio" id="filter-sharpen" name="filter" value="SHARPEN" >
+      <label for="filter-sharpen">Sharpen</label>
+    </div>
+    <div>
+        <input type="radio" id="filter-blur" name="filter" value="BLUR" >
+      <label for="filter-blur">Blur</label>
+    </div>
+        <div>
+        <input type="radio" id="filter-smooth" name="filter" value="SMOOTH" >
+      <label for="filter-smooth">Smooth</label>
+    </div>
+    </fieldset>
+    <div class="button-wrapper">
+        <button name="filter-done" id="filter-done" class="filter-button ok-button" onclick="return filterimage('{{ imgname }}');">Apply</button>
+    </div>
+</div>
+</form>
+
+{% if exifcount > 0 %}
+<div class="image-data" id="exif-data">
+        <h3>EXIF Data:</h3>
+        {% for exif in exifdata %}
+                <div>{{ exif }}</div>
+        {% endfor %}
+</div>
+{% endif %}
+</div>

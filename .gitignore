@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# CVision setting & datasets
+# Source photos for facerecognition:
+app/imgbase/*.*
+# Local database of recognited face encodings:
+app/db/webapp.db
+
