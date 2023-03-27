@@ -44,7 +44,7 @@ const params2url = (url, data) => {
         return url;
 }
 
-const getData = async (url, data=null, ispost=false) => {
+const getData = async (url, data=null, ispost=false, isjson = false) => {
         let METHOD = (ispost)? "POST" : "GET";
         let request_params = {};
         request_params.method = METHOD;
@@ -60,9 +60,14 @@ const getData = async (url, data=null, ispost=false) => {
                 if(!response.ok) {
                         throw new Error(`${url} url unavalaible, http status: ${response.status}` );
                 }
-                return await response.text();
+                if(isjson){ 
+                       return await response.json();
+                }else{
+                        return await response.text();
+                }
         }catch(e){
-                return e.name + ": " + e.message;
+                error = { "error" : e.message };
+                return (isjson)? error : JSON.stringify(error);
         }
 }
 
@@ -132,8 +137,46 @@ const savefacedata = async (faceid, imgname) => {
                 fdata.append(key, face[key])
         }
         let url = srv + '/saveencoding';
-        resp = await getData(url, fdata, true);
-        console.log(resp);
-        alert("DONE");
+        resp = await getData(url, fdata, true, true);
+        //console.log(resp);
+        error = getError(resp);
+        if(error !== null){
+                alert("Ooops! " + error);
+                return false;
+        }
+        result = getResult(resp);
+        if(result !== null){
+                alert("Done. " + result + " row(s) added successfull");
+                let savelogo = document.getElementById('recognized-face-' + faceid).appendChild(document.createElement('h3'));
+                savelogo.innerText = '🖬';
+                savelogo.title = 'Saved in database';
+                savecancel(faceid);
+        }
+        return false;
+}
+
+const getResult = (o) => {
+        return(o != null && o.hasOwnProperty('result'))? o.result : null;
+}
+
+const getError = (o) => {
+        return(o != null && o.hasOwnProperty('error'))? o.error : null;
+}
+
+const compareface = async (faceid, imgname) => {
+        let face = {};
+        face.imgname = imgname;
+        face.faceenc = document.getElementById('face-encoding-'+faceid).value;
+        face.imgtop = document.getElementById('face-position-top-'+faceid).value;
+        face.imgbottom = document.getElementById('face-position-bottom-'+faceid).value;
+        face.imgleft = document.getElementById('face-position-left-'+faceid).value;
+        face.imgright = document.getElementById('face-position-right-'+faceid).value;
+        fdata = new FormData();
+        for (let key in face){
+                fdata.append(key, face[key])
+        }
+        let url = srv + '/compareface';
+        let comparearea = document.getElementById("comparearea");
+        comparearea.innerHTML = await getData(url, fdata, true, false);
         return false;
 }

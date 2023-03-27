@@ -1,0 +1,12 @@
+{% if matchcount > 0 %}
+<h3>Found possible matches: {{matchcount}}</h3>
+        {% for key, value in facematches.items() %}
+            <div class="facematch">
+                <img src="/thumb/{{ value['imgname'] }}" alt="{{ key }}" class="thumb-item" onclick="loadcontent('{{ value['imgname'] }}');">
+                <div>{{ value['comment'] }}</div>
+            </div>
+        {% endfor %}
+{% else %}
+<h3>Possible matches not found</h3>
+{% endif %}
+

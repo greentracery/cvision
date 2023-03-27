@@ -6,12 +6,12 @@ import requests
 import sys
 import os
 import io
+import numpy
 import face_recognition
 import base64
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import BadRequest, HTTPException, default_exceptions
 import sqlite3
-import json
 
 py_version = sys.version
 
@@ -70,9 +70,11 @@ def get_db():
 def db_query(sqlstr, args=()):
         db = get_db()
         cur = db.cursor()
-        cur.execute(sqlstr, args)
+        cnt = cur.execute(sqlstr, args)
         db.commit()
-        return
+        rwcnt = cur.rowcount
+        cur.close()
+        return rwcnt
 
 def db_fetch(sqlstr, args=(), singlrow=False):
         db = get_db()
@@ -131,12 +133,16 @@ def findface(imgname = ""):
         
         face_encs = faces["encodings"]
         enc_count = len(face_encs)
+        face_encodings = []
+        if (enc_count > 0):
+                for enc in face_encs:
+                        face_encodings.append(", ".join(map(str, enc)))
         
         templateData = {
                 'imgname' : imgname,
                 'faceimages' : face_imgs,
                 'facecount' : face_count,
-                'encodings' : face_encs,
+                'encodings' : face_encodings,
                 'enccount' : enc_count,
                 'positions' : face_pos,
                 'poscount' : pos_len,
@@ -417,11 +423,14 @@ def saveencoding():
                         fcomment = request.form['comment']
                 except:
                         abort(400)
-        db_addface((imgname, imgtop, imgright, imgbottom, imgleft, faceenc, fcomment))
-        faces = db_fetch("SELECT * FROM faces;")
-        #res = json.dumps(faces)
-        
-        return jsonify(faces)
+        try:
+                rw = db_addface((imgname, imgtop, imgright, imgbottom, imgleft, faceenc, fcomment))
+                res = {"result" : rw }
+        except sqlite3.Error as e:
+                res = { "error" : e }
+        response = make_response(jsonify(res))
+        response.headers['Content-Type'] = "application/json"
+        return response
 
 def db_addface(args):
         sqlstr = """ INSERT INTO faces (
@@ -434,8 +443,71 @@ def db_addface(args):
             fcomment)
             VALUES (?, ?, ?, ?, ?, ?, ?);
         """
-        db_query(sqlstr, args)
-        return
+        res = db_query(sqlstr, args)
+        return res
+
+def  str_to_float_list(s, separator = ', '):
+        str_enc_list = s.split(separator)
+        if (len(str_enc_list) > 0):
+                float_enc_lst = [float(x) for x in str_enc_list]
+                return float_enc_lst
+                
+        return []
+        
+def list_to_numpy(lst):
+        return numpy.array(lst)
+
+@app.route("/compareface", methods = ['POST'])
+def compareface():
+        face_matches = {}
+        if (request.method == 'POST'):
+                try:
+                        imgname = request.form['imgname']
+                        imgtop = request.form['imgtop']
+                        imgright = request.form['imgright']
+                        imgbottom = request.form['imgbottom']
+                        imgleft = request.form['imgleft']
+                        faceenc = request.form['faceenc']
+                except:
+                        abort(400)
+                faces = db_fetch("SELECT imgname, faceenc, fcomment FROM faces;")
+                known_face_encodings = []
+                known_face_imgnames = []
+                known_face_comments = []
+                face_encoding = list_to_numpy(str_to_float_list(faceenc))
+                if (len(faces) != 0):
+                       for face in faces:
+                                known_face_enc = list_to_numpy(str_to_float_list(face[1]))
+                                known_face_encodings.append(known_face_enc)
+                                known_face_imgnames.append(face[0])
+                                known_face_comments.append(face[2])
+                
+                matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+                if True in matches:
+                        first_match_index = matches.index(True)
+                        tmp_match_img = {}
+                        tmp_match_img['imgname'] = known_face_imgnames[first_match_index]
+                        tmp_match_img['comment'] = known_face_comments[first_match_index]
+                        face_matches[tmp_match_img['imgname']] = tmp_match_img
+                face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                best_match_index = numpy.argmin(face_distances)
+                if matches[best_match_index]:
+                        tmp_match_img = {}
+                        tmp_match_img['imgname'] = known_face_imgnames[best_match_index]
+                        tmp_match_img['comment'] = known_face_comments[best_match_index]
+                        face_matches[tmp_match_img['imgname']] = tmp_match_img
+                
+                
+        #response = make_response(jsonify(face_matches))
+        #response.headers['Content-Type'] = "application/json"
+        #return response
+                
+        templateData = {
+                'facematches' : face_matches,
+                'matchcount' : len(face_matches),
+        }
+        return render_template('compareface.html', **templateData)
+
 
 
 @app.errorhandler(404)

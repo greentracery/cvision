@@ -145,12 +145,24 @@ body {
         text-align:center;
         display:inline-grid;
         vertical-align:top;
+        position: relative;
 }
 .recognized-face img{
         border:solid #06d506 3px; 
         margin:5px; 
         padding:1px;
         display:block;
+}
+
+.recognized-face h3 {
+        position: absolute;
+        top:-8px;
+        left:10px;
+        width: 100%;
+        text-align:left;
+        color:#b00b0b;
+        font-size:1.1em;
+        font-weight:bold;
 }
 
 .face-encoding-wrapper{
@@ -205,6 +217,13 @@ body {
 }
 .face-pos-wrapper .face-data-form-comment input.facecomment{
         width: 320px;
+}
+
+#comparearea div.facematch{
+        display:inline-grid;
+        width: 200px;
+        max-width:300px;
+        text-align:center;
 }
 
 .loader {

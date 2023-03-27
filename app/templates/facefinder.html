@@ -5,6 +5,7 @@
         <div class="recognized-face" id="recognized-face-{{loop.index}}">
         <img alt="{{imgname}}-{{loop.index}}" id="faceimgage-{{loop.index}}" class="recognized-face" src="data:image/png;base64, {{item}}" >
         <button class="findface-button info-button" id="showenc-button-{{loop.index}}" onclick="showencodind({{loop.index}})">Show Face Encoding ({{loop.index}})</button>
+        <button class="findface-button info-button" id="compare-button-{{loop.index}}" onclick="compareface({{loop.index}})">Check &amp; Compare ({{loop.index}})</button>
         <button class="findface-button ok-button" id="saveenc-button-{{loop.index}}" onclick="saveasknown({{loop.index}})">Save As Known ({{loop.index}})</button>
         </div>
     {% endfor %}
@@ -61,3 +62,4 @@
     {% endfor %}
 </div>
 {% endif %}
+<div id="comparearea"></div>
