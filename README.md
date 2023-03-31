@@ -53,7 +53,8 @@ or
 
 b) upgrade:
 
-	pip install --upgrade pip (for python 2.x)
+	pip install --upgrade pip (for python 2.x and probably for python 3.x if python2 is not installed)
+
 or 
 
 	pip3 install --upgrade pip (for python 3.x)
