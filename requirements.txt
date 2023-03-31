@@ -1,0 +1,10 @@
+flask
+requests
+pillow
+numpy
+scipy
+opencv-python
+scikit-build
+cmake
+dlib
+face-recognition
