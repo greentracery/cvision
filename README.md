@@ -65,6 +65,7 @@ Note: If you had python 2.x and pip was installed for python 2.x too, chech the 
 Most likely that after the upgrade the default version of pip will be work with python 3.x. Check it with commands 'pip -V', 'pip2 -V', 'pip3 -V'. 
 
 The results could be like this:
+
 	pip -V
 	pip 21.3.1 from /home/username/.local/lib/python3.6/site-packages/pip (python 3.6)
 
