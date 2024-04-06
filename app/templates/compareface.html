@@ -2,11 +2,16 @@
 <h3>Found possible matches: {{matchcount}}</h3>
         {% for key, value in facematches.items() %}
             <div class="facematch">
-                <img src="/thumb/{{ value['imgname'] }}" alt="{{ key }}" class="thumb-item" onclick="loadcontent('{{ value['imgname'] }}');">
-                <div>{{ value['comment'] }}</div>
+                <img src="/thumb/{{ value['imgname'] }}" alt="{{ key }}" title="Go to {{key}}" 
+                        class="thumb-item bestmatch-{{value['is_best']}} same-{{value['is_same']}}" 
+                        onclick="loadcontent('{{ value['imgname'] }}');">
+                <div>Coincidence: {{ value['coincidence'] }}%</div>
+                <div>(distance {{ value['distance'] }})</div>
+                <div>Comment: {{ value['comment'] }}</div>
             </div>
         {% endfor %}
 {% else %}
 <h3>Possible matches not found</h3>
 {% endif %}
+<h4>Total faces in database: {{total}}</h4>
 

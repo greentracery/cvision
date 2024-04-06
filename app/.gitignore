@@ -1,0 +1,7 @@
+__pycache__
+__pycache__/*.*
+## ignore uploaded photos:
+imgbase/*.jpg
+imgbase/*.jpeg
+imgbase/*.png
+imgbase/*.gif

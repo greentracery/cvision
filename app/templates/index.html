@@ -19,8 +19,9 @@
         {% for item in imageslist %}
                 <option value="{{item}}" {% if item == imgname %}selected{% endif %} >{{loop.index}}. {{item}}</option>
         {% endfor %}
-        </select> 
-        <span id ="img-counter">Tolal images: {{imagescount}}</span>
+        </select>
+        <input type="file" name="file" id="upload-new-file" class="upload-new-file" accept="image/jpeg,image/png" >
+        <button class="upload-button ok-button" id="upload-button" onclick="return uploadimage();">Upload New Image</button>
 </div>
 <div id="content">
         <div id="thumb-preview"></div>

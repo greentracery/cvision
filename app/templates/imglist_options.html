@@ -1,0 +1,3 @@
+{% for item in imageslist %}
+    <option value="{{item}}" {% if item == imgname %}selected{% endif %} >{{loop.index}}. {{item}}</option>
+{% endfor %}

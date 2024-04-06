@@ -1,44 +1,95 @@
 <div class="workimage-preview-wrapper" id="workimage-preview-wrapper">
-        <img src ="/image/{{ imgname }}" alt="{{ imgname }}" id="workimage-preview" class="workimage-preview" onclick="togglezoom(this)">
+        <img src ="/image/{{ imgname }}" alt="{{ imgname }}" id="workimage-preview" class="workimage-preview" onclick="togglezoom(this)" title="Zoom In">
 </div>
 
 <div class="data-image-wrapper">
-<h2>{{ imgname }}</h2>
+<h2>Source: {{ imgname }}</h2>
 {% if imgcount > 0 %}
 <div class="image-data" id="image-data">
-        <h3>Image Data:</h3>
+    <fieldset>
+        <legend>Source Image Parametres:</legend>
         {% for key, value in imgdata.items() %}
-                <div>{{ key }} : {{ value }}</div>
+                <div id="img-data-{{ key }}">{{ key }} : <span id="img-data-{{ key }}-value">{{ value }};</span></div>
         {% endfor %}
-</div>
-{% endif %}
+    </fieldset>
+</div><!-- end of image-data -->
 
-<h2>Image Filter:</h2>
-<form name="img-filter-form" id="img-filter-form">
-<div id="img-filter">
+{% endif %}
+<h2>Image Modes Filter:</h2>
+<div class="image-modes" id="image-modes">
+    <form name="img-mode-form" id="img-mode-form">
+    <fieldset>
+        <legend>Avalaible Image Modes:</legend>
+        <select name="convert" id="convert">
+            {% for key, value in imgmodes.items() %}
+                <option {% if imgdata["mode"] == key %}selected{% endif %} value="{{ key }}">{{ key }} : {{ value }}</option>
+            {% endfor %}
+        </select>
+    </fieldset>
+    </form>
+    <div class="button-wrapper">
+        <button name="convert-done" id="convert-done" class="convert-done ok-button" 
+            onclick="return convertmode('{{ imgname }}');">Apply</button>
+    </div>
+    <div class="button-wrapper">
+        <button name="convert-save" id="convert-save" class="convert-save ok-button" 
+            onclick="return saveimagemode('{{ imgname }}', 'img-mode-form');"
+            title="Save changes in file" >Save</button>
+    </div>
+</div><!-- end of image-modes -->
+
+
+<h2>Color &amp; Blur Filter:</h2>
+<div class="img-filter" id="img-filter">
+    <form name="img-filter-form" id="img-filter-form">
     <fieldset>
     <legend>RGB Mode:</legend>
     <div>
-        <input type="radio" id="mode-rgb" name="mode" value="RGB" checked {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
-      <label for="mode-rgb">RGB</label>
+        <input type="radio" id="mode-rgb" name="color" value="" {% if imgdata["mode"] != 'RGB' %}disabled{% else %}checked{% endif %} >
+        <label for="mode-rgb">RGB</label>
     </div>
     <div>
-        <input type="radio" id="mode-r" name="mode" value="R" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+        <input type="radio" id="mode-r" name="color" value="R" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
       <label for="mode-r">Red</label>
     </div>
     <div>
-        <input type="radio" id="mode-g" name="mode" value="G" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+        <input type="radio" id="mode-g" name="color" value="G" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
       <label for="mode-g">Green</label>
     </div>
     <div>
-        <input type="radio" id="mode-b" name="mode" value="B" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
+        <input type="radio" id="mode-b" name="color" value="B" {% if imgdata["mode"] != 'RGB' %}disabled{% endif %} >
       <label for="mode-b">Blue</label>
     </div>
     </fieldset>
+    
+    <fieldset>
+    <legend>CMYK Mode:</legend>
+    <div>
+        <input type="radio" id="mode-cmyk" name="color" value="" {% if imgdata["mode"] != 'CMYK' %}disabled{% else %}checked{% endif %} >
+      <label for="mode-rgb">CMYK</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-c" name="color" value="C" {% if imgdata["mode"] != 'CMYK' %}disabled{% endif %} >
+      <label for="mode-c">Cyan</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-m" name="color" value="M" {% if imgdata["mode"] != 'CMYK' %}disabled{% endif %} >
+      <label for="mode-m">Magneta</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-y" name="color" value="Y" {% if imgdata["mode"] != 'CMYK' %}disabled{% endif %} >
+      <label for="mode-y">Yellow</label>
+    </div>
+    <div>
+        <input type="radio" id="mode-k" name="color" value="K" {% if imgdata["mode"] != 'CMYK' %}disabled{% endif %} >
+      <label for="mode-k">Key(Black)</label>
+    </div>
+    </fieldset>
+    
     <fieldset>
     <legend>Filter:</legend>
     <div>
-        <input type="radio" id="filter-none" name="filter" value="None" checked>
+        <input type="radio" id="filter-none" name="filter" value="" checked>
       <label for="filter-none">None</label>
     </div>
     <div>
@@ -49,23 +100,35 @@
         <input type="radio" id="filter-blur" name="filter" value="BLUR" >
       <label for="filter-blur">Blur</label>
     </div>
-        <div>
+    <div>
         <input type="radio" id="filter-smooth" name="filter" value="SMOOTH" >
       <label for="filter-smooth">Smooth</label>
     </div>
-    </fieldset>
-    <div class="button-wrapper">
-        <button name="filter-done" id="filter-done" class="filter-button ok-button" onclick="return filterimage('{{ imgname }}');">Apply</button>
+    <div>
+        <input type="radio" id="filter-contour" name="filter" value="CONTOUR" >
+      <label for="filter-contour">Contour</label>
     </div>
-</div>
-</form>
+    </fieldset>
+    </form>
+    <div class="button-wrapper">
+        <button name="filter-done" id="filter-done" class="filter-button ok-button" 
+            onclick="return imagefilter('{{ imgname }}');">Apply</button>
+        <button name="filter-save" id="filter-save" class="filter-save ok-button" 
+            onclick="return saveimagemode('{{ imgname }}', 'img-filter-form');"
+            title="Save changes in file" >Save</button>
+        <button name="file_delete" id="file_delete" class="file_delete del-button" 
+            onclick="return deleteimage('{{ imgname }}');"
+            title="Delete file and connected records from database">Delete File</button>
+    </div>
+</div><!-- end of img-filter -->
+
 
 {% if exifcount > 0 %}
-<div class="image-data" id="exif-data">
+<div class="exif-data" id="exif-data">
         <h3>EXIF Data:</h3>
         {% for exif in exifdata %}
                 <div>{{ exif }}</div>
         {% endfor %}
 </div>
 {% endif %}
-</div>
+</div><!-- end of data-image-wrapper -->

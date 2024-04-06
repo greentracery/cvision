@@ -130,7 +130,10 @@ dmypy.json
 
 # CVision setting & datasets
 # Source photos for facerecognition:
-app/imgbase/*.*
+app/imgbase/*.jpg
+app/imgbase/*.jpeg
+app/imgbase/*.png
+app/image/*.gif
 # Local database of recognited face encodings:
 app/db/webapp.db
 

@@ -47,6 +47,7 @@ body {
         padding:1px;
         text-align:center;
         background-color: whitesmoke;
+        color: #2b2a33;
 }
 #workimage h2{
         margin-left: 12px;
@@ -64,30 +65,66 @@ body {
         cursor:pointer;
 }
 
-#workimage div.image-data{
-        text-align:left;
-        margin-left: 10px;
-        color: #2b2a33;
+#workimage div#image-data{
+        
 }
-#workimage div.image-data h3{
+#workimage div#image-data fieldset{
         font-size:0.8em;
+        text-align:left;
 }
-#workimage div.image-data div{
-        font-size:0.7em;
+#workimage div#image-data fieldset div{
+        display: inline;
+        font-size:0.8em;
+        text-align:left;
 }
-#workimage div#img-filter{
+
+#workimage div#image-modes{
         display:grid;
-        grid-template-columns: 140px 140px 80px;
+        grid-template-columns: 310px 60px 60px;
 }
-#workimage div#img-filter fieldset{
+#workimage div#image-modes fieldset{
+        display:inline-grid;
+        font-size:0.8em;
+        text-align:left;
+}
+#workimage div#image-modes div.button-wrapper{
+        display:inline-grid;
+        text-align:center;
+        padding-top:6px;
+        padding-right: 2px;
+}
+
+#workimage div#img-filter form{
+        display:grid;
+        grid-template-columns: 140px 140px 140px;
+}
+#workimage div#img-filter form fieldset{
         display:inline-grid;
         font-size:0.8em;
         text-align:left;
 }
 #workimage div#img-filter div.button-wrapper{
-        display:inline-grid;
+        display:grid;
+        grid-template-columns: 140px 140px 140px;
         text-align:center;
         padding-top:6px;
+        padding-right: 2px;
+}
+#workimage div#img-filter div.button-wrapper button{
+        margin:2px;
+        height: 30px;
+}
+
+#workimage div.exif-data{
+        text-align:left;
+        margin-left: 10px;
+        color: #2b2a33;
+}
+#workimage div.exif-data h3{
+        font-size:0.8em;
+}
+#workimage div.exif-data div{
+        font-size:0.7em;
 }
 
 #thumbs{
@@ -101,6 +138,12 @@ body {
         padding:1px;
         border:solid #2b2a33 1px;
         display:inline-block;
+}
+.bestmatch-True{
+        border:solid #00FF00 1px;
+}
+.same-True{
+        border:solid #FF0000 1px;
 }
 #pageinfo {
         margin:2px;
@@ -134,12 +177,37 @@ body {
         font-size:1em;
         color: #2b2a33;
 }
+#facefinder div.image-info fieldset{
+        display:inline;
+        font-size:0.8em;
+        text-align:left;
+}
+#facefinder div.image-info div{
+        display:inline-grid;
+        text-align:center;
+        margin:2px;
+        font-size:0.8em;
+}
+
+#workimage-framed-wrapper{
+        padding: 4px;
+}
+#workimage-framed-wrapper a img{
+        border:solid #2b2a33 1px;
+}
+#workimage-framed-wrapper img.workimage-framed{
+        width:400px;
+        padding:10px;
+        border:solid #2b2a33 1px;
+        background-color:#ffffff;
+        cursor:pointer;
+}
 
 .recognized-face-container{
         margin:4px;
 }
 .recognized-face{
-        border:solid #c9c9c9 1px; 
+        border:solid #d3d3d3 1px; 
         margin:5px; 
         padding:1px;
         text-align:center;
@@ -147,13 +215,24 @@ body {
         vertical-align:top;
         position: relative;
 }
-.recognized-face img{
-        border:solid #06d506 3px; 
-        margin:5px; 
+.recognized-face:hover{
+        border:solid #8a8a8a 1px; 
+}
+.recognized-face-img{
+        border:solid #2c9f2c 3px; 
+        margin: 5px auto; 
         padding:1px;
         display:block;
 }
-
+.recognized-face-img:hover{
+        border:solid #06d506 3px;
+}
+.recognized-face-img-selected{
+        border:solid #FF2222 3px;
+}
+.recognized-face-img-selected:hover{
+        border:solid #FF0000 3px;
+}
 .recognized-face h3 {
         position: absolute;
         top:-8px;
@@ -221,9 +300,20 @@ body {
 
 #comparearea div.facematch{
         display:inline-grid;
-        width: 200px;
+        width: 220px;
         max-width:300px;
         text-align:center;
+        border: solid #d3d3d3 1px;
+        padding: 4px;
+}
+
+#comparearea div.facematch:hover{
+        border: solid #8a8a8a 1px;
+}
+
+#comparearea div.facematch img{
+        display: block;
+        margin: 0 auto;
 }
 
 .loader {

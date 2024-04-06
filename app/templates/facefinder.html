@@ -1,12 +1,34 @@
+<div class="workimage-framed-wrapper" id="workimage-framed-wrapper">
+    <img src="data:image/png;base64, {{imgsrc}}" id="workimage-framed" 
+        class="workimage-framed" onclick="togglezoom(this)" title="Zoom In">
+</div>
+<h2>Source: {{ imgname }}</h2>
+<div class="image-info" id="image-info">
+    <fieldset>
+        <legend>Source Image Parametres:</legend>
+        {% for key, value in imgdata.items() %}
+                <div>{{ key }} : {{ value }};</div>
+        {% endfor %}
+    </fieldset>
+</div>
 {% if facecount > 0 %}
     <h2>Faces was found: {{facecount}}</h2>
     <div class="recognized-face-container">
     {% for item in faceimages %}
         <div class="recognized-face" id="recognized-face-{{loop.index}}">
-        <img alt="{{imgname}}-{{loop.index}}" id="faceimgage-{{loop.index}}" class="recognized-face" src="data:image/png;base64, {{item}}" >
-        <button class="findface-button info-button" id="showenc-button-{{loop.index}}" onclick="showencodind({{loop.index}})">Show Face Encoding ({{loop.index}})</button>
-        <button class="findface-button info-button" id="compare-button-{{loop.index}}" onclick="compareface({{loop.index}})">Check &amp; Compare ({{loop.index}})</button>
-        <button class="findface-button ok-button" id="saveenc-button-{{loop.index}}" onclick="saveasknown({{loop.index}})">Save As Known ({{loop.index}})</button>
+            <img alt="{{imgname}}-{{loop.index}}" id="recognized-faceimgage-{{loop.index}}" 
+                class="recognized-face-img" src="data:image/png;base64, {{item}}" 
+                onclick="compareface({{loop.index}}, '{{imgname}}')" 
+                title="Compare face encoding with encodings in database" >
+            <button class="findface-button info-button" id="showenc-button-{{loop.index}}" 
+                onclick="showencodind({{loop.index}})" 
+                title="Show face encoding matrix" >Show Face Encoding ({{loop.index}})</button>
+            <button class="findface-button info-button" id="compare-button-{{loop.index}}" 
+                onclick="compareface({{loop.index}}, '{{imgname}}')"
+                title="Compare face encoding with encodings in database" >Check &amp; Compare ({{loop.index}})</button>
+            <button class="findface-button ok-button" id="saveenc-button-{{loop.index}}" 
+                onclick="saveasknown({{loop.index}})" 
+                title="Save face encoding in database">Save As Known ({{loop.index}})</button>
         </div>
     {% endfor %}
     </div>
@@ -16,12 +38,14 @@
 
 {% if enccount > 0 %}
 <div>
-	{% for enc in encodings %}
-		<div class="face-encoding-wrapper" id="face-encoding-wrapper-{{loop.index}}">
-			<textarea rows="5" class="face-encoding" name="faceencoding" id="face-encoding-{{loop.index}}" readonly>{{ enc }}</textarea><br>
-			<button class="hide info-button" id="hide-encoding" onclick="hideencodind({{loop.index}})">Hide Face Encoding ({{loop.index}})</button>
-		</div>
-	{% endfor %}
+    {% for enc in encodings %}
+        <div class="face-encoding-wrapper" id="face-encoding-wrapper-{{loop.index}}">
+            <textarea rows="5" class="face-encoding" name="faceencoding" 
+                id="face-encoding-{{loop.index}}" readonly>{{ enc }}</textarea><br>
+            <button class="hide info-button" id="hide-encoding" 
+                onclick="hideencodind({{loop.index}})">Hide Face Encoding ({{loop.index}})</button>
+        </div>
+    {% endfor %}
 </div>
 {% endif %}
 
@@ -40,9 +64,9 @@
                     readonly class="facecut"value="{{ pos.1 }}" />
             </div>
             <div class="face-data-form">
-            <label for="face-position-bottom-{{loop.index}}">Bottom:</label>
-            <input type="text" name="faceposition-bottom" id="face-position-bottom-{{loop.index}}" 
-                readonly class="facecut"value="{{ pos.2 }}" />
+                <label for="face-position-bottom-{{loop.index}}">Bottom:</label>
+                <input type="text" name="faceposition-bottom" id="face-position-bottom-{{loop.index}}" 
+                    readonly class="facecut"value="{{ pos.2 }}" />
             </div>
             <div class="face-data-form">
                 <label for="face-position-left-{{loop.index}}">Left:</label>
@@ -55,8 +79,10 @@
                     class="facecomment" placeholder="Enter Your comments here..." />
             </div>
             <div class="button-block">
-                <button class="save" id="save-facedata ok-button" onclick="savefacedata({{loop.index}}, '{{imgname}}')">Save Face ({{loop.index}})</button>
-                <button class="cancel" id="save-cancel cancel-button" onclick="savecancel({{loop.index}})">Cancel</button>
+                <button class="save" id="save-facedata ok-button" 
+                    onclick="savefacedata({{loop.index}}, '{{imgname}}')">Save Face ({{loop.index}})</button>
+                <button class="cancel" id="save-cancel cancel-button" 
+                    onclick="savecancel({{loop.index}})">Cancel</button>
             </div>
         </div>
     {% endfor %}
