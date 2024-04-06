@@ -1,6 +1,6 @@
-# CVision - Experimental training web application using dlib/face_recognition & Flask.
+# CVision.
 
-CVision - Experimental training web application using dlib/face_recognition & Flask.
+Experimental training web application using dlib/face_recognition & Flask.
 Allows you to load images, find faces in images and save them for later comparison and search, 
 compare faces in photos with previously saved ones and search for similar faces in photos, 
 calculate the percentage of matches and the distance between faces found and previously saved.
@@ -123,8 +123,16 @@ Install dependencies via pip using a requirements file:
 
 ### 2.4 Run http://localhost:8080 in browser
 
-Some screenshots 
+Some screenshots:
+
+- Opening image file, faces recognition, getting faces encodings:
 
 ![Opening image file, faces recognition, getting faces encodings](doc/screen1.jpeg)
-![Color channel's filter, sharpen/blur, zoom](doc/screen2.jpeg)
+
+- Color channel's filter, sharpen/blur filter, imagezoom:
+
+![Color channel's filter, sharpen/blur filter, image zoom](doc/screen2.jpeg)
+
+- Faces recognition & finding matches in database with best match highlight:
+
 ![Faces recognition & finding matches in database](doc/screen3.jpeg)
